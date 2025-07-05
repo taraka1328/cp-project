@@ -188,29 +188,38 @@ elif feature == "🍂 Crop Disease Detection":
 elif feature == "☁️ Weather Forecasting":
     st.markdown("### 🌦️ Enter City Name for Weather Info")
     city = st.text_input("City Name")
-    api_key = st.secrets["openweather_api_key"]  # Stored in .streamlit/secrets.toml
+    
+    # Check if API key is available
+    if "openweather_api_key" not in st.secrets:
+        st.error("❌ OpenWeather API key not configured. Please add your API key to Streamlit secrets.")
+    else:
+        api_key = st.secrets["openweather_api_key"]
 
-    if st.button("📡 Get Weather Update"):
-        if city.strip() == "":
-            st.warning("Please enter a valid city name.")
-        else:
-            with st.spinner(f"Fetching weather data for {city}..."):
-                weather = get_weather(city, api_key)
-            if weather:
-                temperature = weather.get("Temperature", "N/A")
-                humidity = weather.get("Humidity", "N/A")
-                condition = weather.get("Weather", "N/A").title()
-
-                st.markdown(f"""
-                <div style='background-color: rgba(0, 0, 0, 0.6); padding: 1rem; border-radius: 10px; color: white; font-size: 18px;'>
-                    <b>📍 Weather Forecast</b><br><br>
-                    🌡️ Temperature: {temperature} °C<br>
-                    💧 Humidity: {humidity}%<br>
-                    ☁️ Weather: {condition}
-                </div>
-                """, unsafe_allow_html=True)
+        if st.button("📡 Get Weather Update"):
+            if city.strip() == "":
+                st.warning("Please enter a valid city name.")
             else:
-                st.error("❌ Unable to retrieve weather data.")
+                with st.spinner(f"Fetching weather data for {city}..."):
+                    weather = get_weather(city, api_key)
+                
+                # Check if there's an error in the response
+                if "error" in weather:
+                    st.error(f"❌ {weather['error']}")
+                elif weather:
+                    temperature = weather.get("Temperature", "N/A")
+                    humidity = weather.get("Humidity", "N/A")
+                    condition = weather.get("Weather", "N/A").title()
+
+                    st.markdown(f"""
+                    <div style='background-color: rgba(0, 0, 0, 0.6); padding: 1rem; border-radius: 10px; color: white; font-size: 18px;'>
+                        <b>📍 Weather Forecast</b><br><br>
+                        🌡️ Temperature: {temperature} °C<br>
+                        💧 Humidity: {humidity}%<br>
+                        ☁️ Weather: {condition}
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    st.error("❌ Unable to retrieve weather data.")
 
 # Inside the feature switch:
 elif feature == "🤖 Chatbot":
