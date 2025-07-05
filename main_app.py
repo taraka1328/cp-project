@@ -49,7 +49,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # main_app.py
 import streamlit as st
-import openai
+
 from crop_recommendation.crop_recommend import recommend_crop
 from crop_disease_detection.predict_disease import predict_disease
 from weather_forecasting.weather_api import get_weather
