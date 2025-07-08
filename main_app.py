@@ -133,13 +133,12 @@ feature = st.sidebar.radio("Choose Feature", ["🌱 Crop Recommendation", "🍂 
 
 # Feature 1: Crop Recommendation
 if feature == "🌱 Crop Recommendation":
-    st.markdown("### 🧪 Enter Soil Parameters")
+     st.markdown("### 🧪 Enter Soil Parameters")
 
-    # Blue label styling
     st.markdown("""
         <style>
         label, .stNumberInput label {
-            color: black !important;  /* Blue */
+            color: black !important;
             font-weight: 600;
         }
         </style>
@@ -148,25 +147,24 @@ if feature == "🌱 Crop Recommendation":
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        k = st.number_input("Potassium (K)")
-        p = st.number_input("Phosphorus (P)")
+        k = st.number_input("Potassium (K)", min_value=0.0, max_value=1000.0, value=0.0, step=1.0)
+        p = st.number_input("Phosphorus (P)", min_value=0.0, max_value=1000.0, value=0.0, step=1.0)
     with col2:
-        n = st.number_input("Nitrogen (N)")
-        temp = st.number_input("Temperature (°C)")
+        n = st.number_input("Nitrogen (N)", min_value=0.0, max_value=1000.0, value=0.0, step=1.0)
+        temp = st.number_input("Temperature (°C)", min_value=-10.0, max_value=60.0, value=25.0, step=0.5)
     with col3:
-        humidity = st.number_input("Humidity (%)")
-        ph = st.number_input("Soil pH")
-        rainfall = st.number_input("Rainfall (mm)")
+        humidity = st.number_input("Humidity (%)", min_value=0.0, max_value=100.0, value=50.0, step=1.0)
+        ph = st.number_input("Soil pH", min_value=0.0, max_value=14.0, value=7.0, step=0.1)
+        rainfall = st.number_input("Rainfall (mm)", min_value=0.0, max_value=500.0, value=50.0, step=1.0)
 
     if st.button("🌿 Recommend Best Crop"):
         with st.spinner("Analyzing..."):
             crop = recommend_crop([n, p, k, temp, humidity, ph, rainfall])
         st.markdown(f"""
-    <div style='background-color: rgba(0, 0, 0, 0.6); padding: 1rem; border-radius: 10px; color: white; font-size: 20px;'>
-        ✅ <b>Recommended Crop:</b> {crop}
-    </div>
-""", unsafe_allow_html=True)
-
+        <div style='background-color: rgba(0, 0, 0, 0.6); padding: 1rem; border-radius: 10px; color: white; font-size: 20px;'>
+            ✅ <b>Recommended Crop:</b> {crop}
+        </div>
+        """, unsafe_allow_html=True)
 # Feature 2: Crop Disease Detection
 elif feature == "🍂 Crop Disease Detection":
     st.markdown("### 📷 Upload a Leaf Image")
